@@ -582,7 +582,37 @@ function hideSuggestions() {
 // Initialize AeroGlass Weather App
 function initApp() {
     setupEventListeners();
-    fetchWeatherData("New York");
+
+    navigator.geolocation.getCurrentPosition(
+        async (position) => {
+            try {
+                const lat =
+                    position.coords.latitude;
+
+                const lon =
+                    position.coords.longitude;
+
+                const response =
+                    await fetch(
+                        `https://geocoding-api.open-meteo.com/v1/reverse?latitude=${lat}&longitude=${lon}&language=en`
+                    );
+
+                const data =
+                    await response.json();
+
+                const city =
+                    data?.results?.[0]?.name ||
+                    "Mumbai";
+
+                fetchWeatherData(city);
+            } catch {
+                fetchWeatherData("Mumbai");
+            }
+        },
+        () => {
+            fetchWeatherData("Mumbai");
+        }
+    );
 }
 
 window.addEventListener("DOMContentLoaded", initApp);
