@@ -1,0 +1,1124 @@
+/* Modern Glassmorphic Weather App CSS Variables & Themes */
+:root {
+    /* Default Theme: Sunny/Day */
+    --bg-grad-1: #ff7e5f;
+    --bg-grad-2: #feb47b;
+    --bg-grad-3: #ff6b8b;
+    --blob-1-color: rgba(255, 126, 95, 0.4);
+    --blob-2-color: rgba(254, 180, 123, 0.4);
+    --blob-3-color: rgba(255, 107, 139, 0.3);
+    
+    /* Glassmorphism Styles */
+    --glass-bg: rgba(255, 255, 255, 0.08);
+    --glass-border: rgba(255, 255, 255, 0.15);
+    --glass-border-focus: rgba(255, 255, 255, 0.3);
+    --glass-highlight: rgba(255, 255, 255, 0.05);
+    
+    /* Typography & Shadows */
+    --text-primary: #ffffff;
+    --text-secondary: rgba(255, 255, 255, 0.7);
+    --text-tertiary: rgba(255, 255, 255, 0.45);
+    --card-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.12);
+    --card-shadow-hover: 0 12px 40px 0 rgba(31, 38, 135, 0.2);
+    --accent: #ffd700;
+    
+    /* Layout Constants */
+    --transition-slow: all 0.8s cubic-bezier(0.25, 0.8, 0.25, 1);
+    --transition-fast: all 0.3s ease;
+}
+
+/* Cloudy Theme */
+body.theme-cloudy {
+    --bg-grad-1: #757f9a;
+    --bg-grad-2: #bdc3c7;
+    --bg-grad-3: #95a5a6;
+    --blob-1-color: rgba(117, 127, 154, 0.45);
+    --blob-2-color: rgba(189, 195, 199, 0.45);
+    --blob-3-color: rgba(149, 165, 166, 0.3);
+    --glass-bg: rgba(255, 255, 255, 0.06);
+    --glass-border: rgba(255, 255, 255, 0.12);
+}
+
+/* Rainy Theme */
+body.theme-rainy {
+    --bg-grad-1: #2b5876;
+    --bg-grad-2: #4e4376;
+    --bg-grad-3: #1a365d;
+    --blob-1-color: rgba(43, 88, 120, 0.5);
+    --blob-2-color: rgba(78, 67, 118, 0.5);
+    --blob-3-color: rgba(26, 54, 93, 0.4);
+    --glass-bg: rgba(15, 20, 35, 0.22);
+    --glass-border: rgba(255, 255, 255, 0.08);
+}
+
+/* Snowy Theme */
+body.theme-snowy {
+    --bg-grad-1: #83a4d4;
+    --bg-grad-2: #b6fbff;
+    --bg-grad-3: #dff9fb;
+    --blob-1-color: rgba(131, 164, 212, 0.4);
+    --blob-2-color: rgba(182, 251, 255, 0.4);
+    --blob-3-color: rgba(223, 249, 251, 0.3);
+    --glass-bg: rgba(255, 255, 255, 0.12);
+    --glass-border: rgba(255, 255, 255, 0.22);
+    --text-primary: #1e293b;
+    --text-secondary: rgba(30, 41, 59, 0.75);
+    --text-tertiary: rgba(30, 41, 59, 0.5);
+    --card-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.05);
+    --card-shadow-hover: 0 12px 40px 0 rgba(0, 0, 0, 0.08);
+    --accent: #2563eb;
+}
+
+/* Stormy Theme */
+body.theme-stormy {
+    --bg-grad-1: #1f1c2c;
+    --bg-grad-2: #928dab;
+    --bg-grad-3: #0f0c1b;
+    --blob-1-color: rgba(31, 28, 44, 0.6);
+    --blob-2-color: rgba(146, 141, 171, 0.3);
+    --blob-3-color: rgba(15, 12, 27, 0.5);
+    --glass-bg: rgba(10, 10, 20, 0.3);
+    --glass-border: rgba(255, 255, 255, 0.06);
+}
+
+/* Night Theme */
+body.theme-night {
+    --bg-grad-1: #0f2027;
+    --bg-grad-2: #203a43;
+    --bg-grad-3: #2c5364;
+    --blob-1-color: rgba(15, 32, 39, 0.5);
+    --blob-2-color: rgba(32, 58, 67, 0.5);
+    --blob-3-color: rgba(44, 83, 100, 0.4);
+    --glass-bg: rgba(255, 255, 255, 0.05);
+    --glass-border: rgba(255, 255, 255, 0.1);
+}
+
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+    width: 100%;
+    overflow-x: hidden; /* Lock horizontal layout flow globally */
+}
+
+body {
+    font-family: 'Outfit', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    background: linear-gradient(135deg, var(--bg-grad-1) 0%, var(--bg-grad-2) 50%, var(--bg-grad-3) 100%);
+    background-attachment: fixed;
+    background-size: 200% 200%;
+    color: var(--text-primary);
+    position: relative;
+    transition: var(--transition-slow);
+    animation: gradientShift 15s ease infinite;
+}
+
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Dynamic Floating Blobs */
+.bg-blobs {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    transition: var(--transition-slow);
+}
+
+.blob-1 {
+    width: 300px; /* Reduced to avoid GPU rendering issues & bloat */
+    height: 300px;
+    top: -5%;
+    left: -5%;
+    background-color: var(--blob-1-color);
+    animation: floatBlob1 25s ease-in-out infinite alternate;
+}
+
+.blob-2 {
+    width: 350px;
+    height: 350px;
+    bottom: -10%;
+    right: -5%;
+    background-color: var(--blob-2-color);
+    animation: floatBlob2 30s ease-in-out infinite alternate;
+}
+
+.blob-3 {
+    width: 220px;
+    height: 220px;
+    top: 40%;
+    left: 50%;
+    background-color: var(--blob-3-color);
+    animation: floatBlob3 20s ease-in-out infinite alternate;
+}
+
+@keyframes floatBlob1 {
+    0% { transform: translate(0, 0) scale(1) rotate(0deg); }
+    100% { transform: translate(60px, 80px) scale(1.1) rotate(360deg); border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; }
+}
+
+@keyframes floatBlob2 {
+    0% { transform: translate(0, 0) scale(1.1) rotate(0deg); }
+    100% { transform: translate(-80px, -60px) scale(0.9) rotate(-360deg); border-radius: 60% 40% 30% 70% / 50% 30% 70% 50%; }
+}
+
+@keyframes floatBlob3 {
+    0% { transform: translate(0, 0) scale(0.9); }
+    100% { transform: translate(-90px, 70px) scale(1.1); border-radius: 40% 60% 50% 50% / 40% 40% 60% 60%; }
+}
+
+/* Glassmorphism Card Core */
+.glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(16px) saturate(120%);
+    -webkit-backdrop-filter: blur(16px) saturate(120%);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--card-shadow);
+    border-radius: 20px;
+    transition: var(--transition-fast);
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+    width: 100%; /* Contain cards inside screen width constraints */
+}
+
+.glass-card:hover {
+    box-shadow: var(--card-shadow-hover);
+    border-color: var(--glass-border-focus);
+}
+
+.glass-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0) 100%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Main Container Layout */
+.app-container {
+    width: 100%;
+    max-width: 1100px; /* Reduced from 1200px to look cleaner on desktop */
+    padding: 24px 20px; /* Reduced padding to make components more compact */
+    display: flex;
+    flex-direction: column;
+    gap: 24px; /* Reduced gap */
+    z-index: 1;
+    flex-grow: 1;
+}
+
+/* Header Component */
+.app-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    z-index: 10;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.brand h1 {
+    font-size: 24px; /* Reduced size */
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    background: linear-gradient(to right, #ffffff, rgba(255, 255, 255, 0.85));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.logo-icon svg {
+    width: 28px;
+    height: 28px;
+    stroke: var(--text-primary);
+    filter: drop-shadow(0 2px 6px rgba(255, 255, 255, 0.15));
+}
+
+/* Search Container with Autocomplete */
+.search-container {
+    position: relative;
+    width: 100%;
+    max-width: 320px; /* Reduced max-width to avoid cluttering */
+}
+
+.search-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 50px;
+    padding: 4px 14px;
+    transition: var(--transition-fast);
+}
+
+.search-box:focus-within {
+    border-color: var(--glass-border-focus);
+    box-shadow: 0 0 12px rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.search-icon {
+    width: 16px;
+    height: 16px;
+    stroke: var(--text-secondary);
+    margin-right: 8px;
+    flex-shrink: 0;
+}
+
+.search-box input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    padding: 6px 0;
+    color: var(--text-primary);
+    font-family: inherit;
+    font-size: 15px; /* Keeps size legible while preventing iOS zoom issues */
+}
+
+.search-box input::placeholder {
+    color: var(--text-tertiary);
+}
+
+.clear-search {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--text-secondary);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    transition: var(--transition-fast);
+}
+
+.clear-search svg {
+    width: 14px;
+    height: 14px;
+}
+
+.clear-search:hover {
+    color: var(--text-primary);
+    transform: scale(1.1);
+}
+
+/* Autocomplete Suggestion Dropdown */
+.suggestions-box {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    width: 100%;
+    background: rgba(20, 25, 40, 0.9);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 14px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    max-height: 220px;
+    overflow-y: auto;
+    z-index: 100;
+    display: none;
+    -webkit-overflow-scrolling: touch;
+}
+
+.suggestions-box.show {
+    display: block;
+    animation: slideDown 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.suggestion-item {
+    padding: 12px 16px;
+    cursor: pointer;
+    color: #ffffff;
+    font-size: 14px;
+    transition: var(--transition-fast);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.suggestion-item:last-child {
+    border-bottom: none;
+}
+
+.suggestion-item:hover, .suggestion-item:active {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.suggestion-item .country-code {
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 11px;
+    font-weight: 500;
+    background: rgba(255, 255, 255, 0.08);
+    padding: 2px 5px;
+    border-radius: 4px;
+}
+
+/* Celsius/Fahrenheit Unit Toggle */
+.unit-toggle {
+    display: flex;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 30px;
+    padding: 2px;
+}
+
+.unit-btn {
+    border: none;
+    background: transparent;
+    color: var(--text-secondary);
+    padding: 6px 12px;
+    border-radius: 30px;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 600;
+    font-size: 13px;
+    transition: var(--transition-fast);
+}
+
+.unit-btn.active {
+    background: #ffffff;
+    color: #000000;
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
+}
+
+body.theme-snowy .unit-btn.active {
+    background: var(--accent);
+    color: #ffffff;
+}
+
+/* Grid Layout */
+.weather-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 1.2fr; /* Refitted grid fraction spacing */
+    gap: 24px; /* Reduced gap spacing */
+    width: 100%;
+}
+
+.left-column, .right-column {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    width: 100%;
+    min-width: 0; /* Prevents columns from forcing grid expansion beyond boundaries */
+}
+
+/* Main Weather Card */
+.main-weather-card {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 330px; /* Reduced height constraints */
+}
+
+.weather-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.location-details h2 {
+    font-size: 26px; /* Reduced from 32px to look sleeker */
+    font-weight: 600;
+    letter-spacing: -0.5px;
+    margin-bottom: 2px;
+}
+
+.location-details p {
+    color: var(--text-secondary);
+    font-size: 13px;
+    font-weight: 400;
+}
+
+.weather-condition-badge {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 5px 12px;
+    border-radius: 30px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.weather-body {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 16px 0;
+}
+
+.temp-display {
+    font-size: 76px; /* Reduced from 96px to avoid layout bloating */
+    font-weight: 300;
+    line-height: 1;
+    display: flex;
+    align-items: flex-start;
+    letter-spacing: -2px;
+}
+
+.temp-unit {
+    font-size: 38px;
+    font-weight: 300;
+    margin-top: 6px;
+}
+
+.weather-visual svg {
+    width: 110px; /* Reduced from 140px to prevent overflow */
+    height: 110px;
+    filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.12));
+    animation: floatIcon 6s ease-in-out infinite alternate;
+}
+
+@keyframes floatIcon {
+    0% { transform: translateY(-6px) rotate(-1deg); }
+    100% { transform: translateY(6px) rotate(1deg); }
+}
+
+.weather-footer {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.high-low {
+    display: flex;
+    gap: 10px;
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+.high-low strong {
+    color: var(--text-primary);
+}
+
+.divider {
+    color: var(--text-tertiary);
+}
+
+.weather-summary {
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text-secondary);
+}
+
+/* Hourly Card CSS */
+.hourly-card {
+    padding: 20px;
+}
+
+.hourly-card h3, .weekly-card h3 {
+    font-size: 14px; /* Reduced */
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+    color: var(--text-secondary);
+}
+
+.hourly-forecast-container {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255,255,255,0.15) transparent;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+}
+
+/* Custom Scrollbar for Webkit */
+.hourly-forecast-container::-webkit-scrollbar {
+    height: 4px;
+}
+
+.hourly-forecast-container::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.hourly-forecast-container::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 10px;
+}
+
+.hourly-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 10px;
+    border-radius: 14px;
+    min-width: 66px; /* Slightly narrower */
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    transition: var(--transition-fast);
+    scroll-snap-align: start;
+}
+
+.hourly-item:hover, .hourly-item:active {
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateY(-2px);
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+.hourly-time {
+    font-size: 11px;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.hourly-icon svg {
+    width: 24px;
+    height: 24px;
+}
+
+.hourly-temp {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* Weekly Forecast Card */
+.weekly-card {
+    padding: 20px;
+}
+
+.weekly-forecast-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.weekly-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    transition: var(--transition-fast);
+    gap: 8px;
+}
+
+.weekly-row:hover, .weekly-row:active {
+    background: rgba(255, 255, 255, 0.06);
+    transform: translateX(2px);
+    border-color: rgba(255, 255, 255, 0.12);
+}
+
+/* Flexible, non-overflowing column ratios */
+.weekly-day {
+    font-size: 14px;
+    font-weight: 500;
+    flex: 0 0 55px; /* Tight static allocation */
+}
+
+.weekly-condition {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex: 0 0 95px; /* Flexible allocation avoiding bloat */
+    color: var(--text-secondary);
+    font-size: 12px;
+}
+
+.weekly-condition svg {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+}
+
+.weekly-condition span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; /* Prevent long condition text from expanding row */
+}
+
+/* Temperature range fits dynamically */
+.weekly-temp-range {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1 1 auto;
+    justify-content: flex-end;
+}
+
+.range-min, .range-max {
+    font-size: 12px;
+    font-weight: 600;
+    width: 24px;
+    text-align: right;
+}
+
+.range-min {
+    color: var(--text-secondary);
+}
+
+.range-bar {
+    height: 5px;
+    flex: 1 1 40px; /* Fluid range bar, auto-shrinks down to 30px */
+    max-width: 70px; /* Kept short to prevent overflow */
+    min-width: 30px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 3px;
+    position: relative;
+    overflow: hidden;
+}
+
+body.theme-snowy .range-bar {
+    background: rgba(30, 41, 59, 0.15);
+}
+
+.range-bar-fill {
+    height: 100%;
+    position: absolute;
+    border-radius: 3px;
+    background: linear-gradient(to right, #ffd700, #ff5722);
+}
+
+body.theme-snowy .range-bar-fill {
+    background: linear-gradient(to right, #3b82f6, #06b6d4);
+}
+
+/* Details Grid */
+.details-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px; /* Tight gap */
+}
+
+.detail-card {
+    padding: 16px; /* Compact padding */
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.detail-icon {
+    width: 38px; /* Reduced from 44px to look cleaner */
+    height: 38px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    flex-shrink: 0;
+}
+
+.detail-icon svg {
+    width: 18px; /* Reduced from 22px */
+    height: 18px;
+    stroke: var(--accent);
+}
+
+.detail-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0; /* Allows text clipping/shrinkage if space is narrow */
+}
+
+.detail-label {
+    font-size: 11px; /* Smaller */
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 500;
+}
+
+.detail-value {
+    font-size: 14px; /* Reduced from 16px */
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Footer Section */
+.glass-footer {
+    width: 100%;
+    text-align: center;
+    padding: 16px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    backdrop-filter: blur(8px);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    background: rgba(0, 0, 0, 0.05);
+    margin-top: 24px;
+    z-index: 1;
+}
+
+body.theme-snowy .glass-footer {
+    color: #475569;
+    border-color: rgba(0, 0, 0, 0.05);
+}
+
+/* ==========================================================================
+   Responsive Breakpoints / Layout Fit Checks
+   ========================================================================== */
+
+@media (max-width: 900px) {
+    .weather-grid {
+        grid-template-columns: 1fr; /* Single column stack */
+        gap: 20px;
+    }
+    
+    .app-container {
+        padding: 16px 14px;
+        gap: 20px;
+    }
+}
+
+/* Mobile viewport layout optimizations */
+@media (max-width: 480px) {
+    .app-header {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 12px;
+    }
+    
+    .search-container {
+        grid-column: 1 / span 2;
+        max-width: 100%;
+        order: 3; /* Places search bar below Brand and unit toggle */
+    }
+
+    /* Smaller floating background shapes for low-end graphics renderers */
+    .blob-1 { width: 180px; height: 180px; }
+    .blob-2 { width: 220px; height: 220px; }
+    .blob-3 { width: 140px; height: 140px; }
+
+    /* Compact Typography layout scaling to avoid text overflow */
+    .brand h1 {
+        font-size: 20px;
+    }
+    
+    .location-details h2 {
+        font-size: 22px;
+    }
+    
+    .temp-display {
+        font-size: 60px; /* Scaled down temperature */
+    }
+    
+    .temp-unit {
+        font-size: 30px;
+    }
+    
+    .weather-visual svg {
+        width: 80px; /* Compact weather illustrations */
+        height: 80px;
+    }
+    
+    .weather-summary {
+        font-size: 13px;
+    }
+
+    /* Weekly column sizing shifts to avoid overflow */
+    .weekly-day {
+        flex: 0 0 50px;
+        font-size: 13px;
+    }
+    
+    .weekly-condition {
+        flex: 0 0 85px;
+        font-size: 11px;
+    }
+    
+    .weekly-condition svg {
+        width: 16px;
+        height: 16px;
+    }
+
+    .range-bar {
+        max-width: 45px; /* Extremely narrow range bar to protect alignment boundaries */
+    }
+    
+    .range-min, .range-max {
+        font-size: 11px;
+    }
+
+    /* Small Screen Detail Cards stack vertically to prevent overlapping column rows */
+    .details-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+    
+    .detail-card {
+        padding: 12px;
+    }
+}
+
+/* Extra-small mobile layouts (e.g. 320px screens) */
+@media (max-width: 350px) {
+    .temp-display {
+        font-size: 52px;
+    }
+    
+    .weather-visual svg {
+        width: 70px;
+        height: 70px;
+    }
+    
+    .range-bar {
+        display: none; /* Safely hides range bars to avoid overlapping text bounds */
+    }
+}
+
+
+/* ==========================================
+   IMPROVED RESPONSIVE FIXES
+   ========================================== */
+
+/* Prevent horizontal overflow everywhere */
+html,
+body {
+    width: 100%;
+    overflow-x: hidden;
+}
+
+.app-container {
+    width: min(1400px, 100%);
+    padding-inline: clamp(12px, 3vw, 24px);
+}
+
+/* Better mobile viewport */
+body {
+    min-height: 100dvh;
+}
+
+/* Cards */
+.glass-card {
+    width: 100%;
+}
+
+/* Weather body responsive */
+.weather-body {
+    gap: 20px;
+}
+
+.temp-display {
+    min-width: 0;
+    word-break: break-word;
+}
+
+.weather-visual {
+    flex-shrink: 0;
+}
+
+/* Tablet */
+@media (max-width: 900px) {
+
+    .weather-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .weather-body {
+        justify-content: space-between;
+    }
+
+    .main-weather-card {
+        min-height: auto;
+    }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+
+    .app-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .brand {
+        justify-content: center;
+    }
+
+    .search-container {
+        max-width: 100%;
+    }
+
+    .unit-toggle {
+        align-self: center;
+    }
+
+    .weather-header {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .weather-body {
+        flex-direction: column;
+        text-align: center;
+        gap: 24px;
+    }
+
+    .temp-display {
+        justify-content: center;
+        font-size: clamp(4rem, 14vw, 6rem);
+    }
+
+    .temp-unit {
+        font-size: clamp(2rem, 7vw, 3rem);
+    }
+
+    .weather-visual svg {
+        width: 110px;
+        height: 110px;
+    }
+
+    .high-low {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .weather-summary {
+        text-align: center;
+    }
+
+    .details-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Small Phones */
+@media (max-width: 480px) {
+
+    .app-container {
+        padding: 12px;
+    }
+
+    .main-weather-card,
+    .hourly-card,
+    .weekly-card,
+    .detail-card {
+        border-radius: 20px;
+    }
+
+    .main-weather-card {
+        padding: 20px;
+    }
+
+    .location-details h2 {
+        font-size: 1.4rem;
+    }
+
+    .temp-display {
+        font-size: clamp(3.5rem, 18vw, 5rem);
+    }
+
+    .weather-visual svg {
+        width: 90px;
+        height: 90px;
+    }
+
+    /* Weekly Forecast */
+    .weekly-row {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 10px;
+        align-items: center;
+    }
+
+    .weekly-condition {
+        width: auto;
+        justify-self: start;
+    }
+
+    .weekly-temp-range {
+        grid-column: 1 / -1;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    .range-bar {
+        flex: 1;
+        width: auto;
+        max-width: none;
+    }
+
+    /* Details */
+    .details-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .detail-card {
+        padding: 14px;
+    }
+
+    /* Hourly cards */
+    .hourly-item {
+        min-width: 70px;
+    }
+
+    /* Reduce heavy effects */
+    .blob {
+        filter: blur(50px);
+    }
+}
+
+/* Extra Small Devices */
+@media (max-width: 360px) {
+
+    .brand h1 {
+        font-size: 18px;
+    }
+
+    .temp-display {
+        font-size: 3.2rem;
+    }
+
+    .weather-visual svg {
+        width: 75px;
+        height: 75px;
+    }
+
+    .weekly-row {
+        padding: 10px;
+    }
+
+    .detail-icon {
+        width: 38px;
+        height: 38px;
+    }
+}

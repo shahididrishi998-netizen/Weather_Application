@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AeroGlass | Premium Weather Experience</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Background Animated Fluid Blobs -->
+    <div class="bg-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <!-- Main Container -->
+    <main class="app-container">
+        <!-- Top bar with search and unit toggle -->
+        <header class="app-header">
+            <div class="brand">
+                <span class="logo-icon">
+                    <!-- SVG cloud with sun behind it -->
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2v2M4.93 4.93l1.41 1.41M20 12h2M17.66 17.66l1.41 1.41M2 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
+                        <path d="M20 17.58A5 5 0 0 0 18 8h-1.26A8 8 0 1 0 4 16.25" fill="rgba(255,255,255,0.15)"/>
+                        <path d="M20 17.58A5 5 0 0 0 18 8h-1.26A8 8 0 1 0 4 16.25"/>
+                    </svg>
+                </span>
+                <h1>AeroGlass</h1>
+            </div>
+            <div class="search-container">
+                <div class="search-box">
+                    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    <input type="text" id="search-input" placeholder="Search city..." autocomplete="off">
+                    <button class="clear-search" id="clear-search-btn" aria-label="Clear search">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+                <div class="suggestions-box" id="suggestions-box"></div>
+            </div>
+            <div class="unit-toggle">
+                <button class="unit-btn active" id="unit-c">°C</button>
+                <button class="unit-btn" id="unit-f">°F</button>
+            </div>
+        </header>
+
+        <!-- Weather Layout Grid -->
+        <div class="weather-grid">
+            <!-- Left Column: Main Card + Hourly -->
+            <section class="left-column">
+                <!-- Main Glass Card -->
+                <div class="glass-card main-weather-card">
+                    <div class="weather-header">
+                        <div class="location-details">
+                            <h2 id="location-name">Loading...</h2>
+                            <p id="current-date">--</p>
+                        </div>
+                        <div class="weather-condition-badge" id="weather-badge">
+                            --
+                        </div>
+                    </div>
+                    <div class="weather-body">
+                        <div class="temp-display">
+                            <span class="temp-val" id="current-temp">--</span><span class="temp-unit">°</span>
+                        </div>
+                        <div class="weather-visual" id="main-weather-icon">
+                            <!-- SVG weather visual will be populated by JS -->
+                        </div>
+                    </div>
+                    <div class="weather-footer">
+                        <div class="high-low">
+                            <span>High: <strong id="high-temp">--°</strong></span>
+                            <span class="divider">|</span>
+                            <span>Low: <strong id="low-temp">--°</strong></span>
+                        </div>
+                        <p class="weather-summary" id="weather-desc">--</p>
+                    </div>
+                </div>
+
+                <!-- Hourly Forecast Card -->
+                <div class="glass-card hourly-card">
+                    <h3>Hourly Forecast</h3>
+                    <div class="hourly-forecast-container" id="hourly-container">
+                        <!-- Dynamic Hourly items -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right Column: Details + 7-Day Forecast -->
+            <section class="right-column">
+                <!-- 7-Day Forecast Card -->
+                <div class="glass-card weekly-card">
+                    <h3>7-Day Forecast</h3>
+                    <div class="weekly-forecast-container" id="weekly-container">
+                        <!-- Dynamic Weekly items -->
+                    </div>
+                </div>
+
+                <!-- Weather Details Grid -->
+                <div class="details-grid">
+                    <!-- Detail Item 1: Humidity -->
+                    <div class="glass-card detail-card">
+                        <div class="detail-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
+                            </svg>
+                        </div>
+                        <div class="detail-info">
+                            <span class="detail-label">Humidity</span>
+                            <span class="detail-value" id="val-humidity">--%</span>
+                        </div>
+                    </div>
+                    <!-- Detail Item 2: Wind -->
+                    <div class="glass-card detail-card">
+                        <div class="detail-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.73-8.27A2.5 2.5 0 1 1 19.5 12H2"></path>
+                            </svg>
+                        </div>
+                        <div class="detail-info">
+                            <span class="detail-label">Wind Speed</span>
+                            <span class="detail-value" id="val-wind">-- km/h</span>
+                        </div>
+                    </div>
+                    <!-- Detail Item 3: UV Index -->
+                    <div class="glass-card detail-card">
+                        <div class="detail-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="5"></circle>
+                                <line x1="12" y1="1" x2="12" y2="3"></line>
+                                <line x1="12" y1="21" x2="12" y2="23"></line>
+                                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                                <line x1="1" y1="12" x2="3" y2="12"></line>
+                                <line x1="21" y1="12" x2="23" y2="12"></line>
+                                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                            </svg>
+                        </div>
+                        <div class="detail-info">
+                            <span class="detail-label">UV Index</span>
+                            <span class="detail-value" id="val-uv">--</span>
+                        </div>
+                    </div>
+                    <!-- Detail Item 4: Air Quality -->
+                    <div class="glass-card detail-card">
+                        <div class="detail-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 3.5 1 8.5C18.5 16.5 16 20 11 20z" />
+                                <path d="M9 22v-6" />
+                            </svg>
+                        </div>
+                        <div class="detail-info">
+                            <span class="detail-label">Air Quality</span>
+                            <span class="detail-value" id="val-aqi">--</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="glass-footer">
+        <p>AeroGlass &copy; 2026. Made with glassy fluid gradients & love.</p>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
